@@ -9,4 +9,6 @@ public interface ParkingService {
     void clearParking();
 
     void responseAgain();
+
+    void addFewCarsToList() throws InterruptedException;
 }

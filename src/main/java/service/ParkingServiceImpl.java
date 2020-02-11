@@ -34,6 +34,28 @@ public class ParkingServiceImpl implements ParkingService {
         }
     }
 
+    @Override
+    public void addFewCarsToList() throws InterruptedException {
+
+        int randomNumberCars = 6;
+
+        for (int i = 0; i <= randomNumberCars; i++){
+            Thread.sleep(2500);
+            if (isEmptyParking()) {
+
+                carList.add(new Car(random.nextInt(10)));
+                System.out.println("Car added, in parking " + carList.size() + " cars");
+//            responseAgain();
+            } else {
+                System.out.println("Parking is full ");
+                carList.forEach(car -> System.out.println("Through " + car.getParkingExpired() + " free parking space"));
+                clearParking();
+            }
+        }
+
+        responseAgain();
+    }
+
 
     @Override
     public void clearParking() {
@@ -60,8 +82,15 @@ public class ParkingServiceImpl implements ParkingService {
         String userResponse = response.nextLine();
 
         if (userResponse.equals("Yes")) {
+            System.out.println("One car");
             addCarsToList();
-        } else {
+        } else if (userResponse.equals("Add few cars")){
+            try {
+                addFewCarsToList();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }else {
             System.out.println("Invalid input, please try again");
             responseAgain();
         }
