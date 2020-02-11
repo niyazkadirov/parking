@@ -1,13 +1,15 @@
 package service;
 
 import lombok.SneakyThrows;
+import model.Car;
 
 import java.util.InputMismatchException;
+import java.util.List;
 import java.util.Scanner;
 
 public class PrinterServiceImpl implements PrinterService {
 
-    MyThread thread = new MyThread();
+    private MyThread thread = new MyThread();
 
     @Override
     public void printQuestionToConsole(ParkingServiceImpl parkingService) {
@@ -19,18 +21,25 @@ public class PrinterServiceImpl implements PrinterService {
             thread.start();
             Scanner scanner = new Scanner(System.in);
             scanner.nextLine();
-            parkingService.checkEnter=(false);
-            System.out.println(parkingService.isCheckEnter());
+            parkingService.setCheckEnter();
+
         } catch (InputMismatchException e) {
             System.out.println("Invalid input, please try again");
             printQuestionToConsole(parkingService);
         }
+    }
 
-       // parkingService.responseAgain();
-
+    public void printParkingInfo(List<Car> cars){
+        System.out.println("In the parking lot of "+ cars.size() +" cars");
+        System.out.println("parking will be free in "+ cars.stream().sorted().findFirst());
     }
 
 }
+
+
+
+
+
 
 class MyThread extends Thread {
     private ParkingServiceImpl parkingService = new ParkingServiceImpl();

@@ -10,15 +10,16 @@ import java.util.Scanner;
 
 @Data
 public class ParkingServiceImpl implements ParkingService {
-    private int parkingSize;
+    public static int parkingSize;
     private List<Car> carList = new ArrayList<>();
     private Random random = new Random(1);
-    public volatile boolean checkEnter = true;
+    private static boolean checkEnter = true;
+    private PrinterService printerService;
 
 
     @Override
     public boolean isEmptyParking() {
-        return carList.size() < parkingSize;
+        return carList.size() < getParkingSize();
     }
 
     @Override
@@ -55,14 +56,18 @@ public class ParkingServiceImpl implements ParkingService {
         responseAgain();
     }
 
+    public void setCheckEnter(){
+        checkEnter = false;
+    }
+
+
     @Override
     public void addFewCarsToListAndStopByEnter() throws InterruptedException {
 
+
         while (checkEnter) {
-            System.out.println(isCheckEnter());
-            System.out.println("Looop");
-            Thread.sleep(2500);
-            if (!isEmptyParking()) {
+            Thread.sleep(2000);
+            if (isEmptyParking()) {
                 carList.add(new Car(random.nextInt(10)));
                 System.out.println("Car added, in parking " + carList.size() + " cars");
             } else {
@@ -72,7 +77,7 @@ public class ParkingServiceImpl implements ParkingService {
             }
         }
 
-        System.out.println("Exit");
+        printParkingInfo(carList);
     }
 
 
@@ -101,7 +106,6 @@ public class ParkingServiceImpl implements ParkingService {
         String userResponse = response.nextLine();
 
         if (userResponse.equals("Yes")) {
-            System.out.println("One car");
             addOneCarToList();
         } else if (userResponse.equals("Add few cars")) {
             try {
@@ -113,5 +117,17 @@ public class ParkingServiceImpl implements ParkingService {
             System.out.println("Invalid input, please try again");
             responseAgain();
         }
+    }
+
+    public void printParkingInfo(List<Car> cars){
+        System.out.println("In the parking lot of " + cars.size() + " cars");
+    }
+
+    public int getParkingSize() {
+        return parkingSize;
+    }
+
+    public void setParkingSize(int parkingSizee) {
+        parkingSize = parkingSizee;
     }
 }
