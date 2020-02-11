@@ -13,6 +13,7 @@ public class ParkingServiceImpl implements ParkingService {
     private int parkingSize;
     private List<Car> carList = new ArrayList<>();
     private Random random = new Random(1);
+    public volatile boolean checkEnter = true;
 
 
     @Override
@@ -21,7 +22,7 @@ public class ParkingServiceImpl implements ParkingService {
     }
 
     @Override
-    public void addCarsToList() {
+    public void addOneCarToList() {
         if (isEmptyParking()) {
 
             carList.add(new Car(random.nextInt(10)));
@@ -39,13 +40,31 @@ public class ParkingServiceImpl implements ParkingService {
 
         int randomNumberCars = 6;
 
-        for (int i = 0; i <= randomNumberCars; i++){
+
+        for (int i = 0; i <= randomNumberCars; i++) {
             Thread.sleep(2500);
             if (isEmptyParking()) {
-
                 carList.add(new Car(random.nextInt(10)));
                 System.out.println("Car added, in parking " + carList.size() + " cars");
-//            responseAgain();
+            } else {
+                System.out.println("Parking is full ");
+                carList.forEach(car -> System.out.println("Through " + car.getParkingExpired() + " free parking space"));
+                clearParking();
+            }
+        }
+        responseAgain();
+    }
+
+    @Override
+    public void addFewCarsToListAndStopByEnter() throws InterruptedException {
+
+        while (checkEnter) {
+            System.out.println(isCheckEnter());
+            System.out.println("Looop");
+            Thread.sleep(2500);
+            if (!isEmptyParking()) {
+                carList.add(new Car(random.nextInt(10)));
+                System.out.println("Car added, in parking " + carList.size() + " cars");
             } else {
                 System.out.println("Parking is full ");
                 carList.forEach(car -> System.out.println("Through " + car.getParkingExpired() + " free parking space"));
@@ -53,7 +72,7 @@ public class ParkingServiceImpl implements ParkingService {
             }
         }
 
-        responseAgain();
+        System.out.println("Exit");
     }
 
 
@@ -83,14 +102,14 @@ public class ParkingServiceImpl implements ParkingService {
 
         if (userResponse.equals("Yes")) {
             System.out.println("One car");
-            addCarsToList();
-        } else if (userResponse.equals("Add few cars")){
+            addOneCarToList();
+        } else if (userResponse.equals("Add few cars")) {
             try {
                 addFewCarsToList();
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-        }else {
+        } else {
             System.out.println("Invalid input, please try again");
             responseAgain();
         }

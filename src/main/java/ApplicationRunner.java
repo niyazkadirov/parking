@@ -8,6 +8,9 @@ public class ApplicationRunner {
         PrinterService printerService = new PrinterServiceImpl();
         ParkingServiceImpl parkingService = new ParkingServiceImpl();
 
+
         printerService.printQuestionToConsole(parkingService);
     }
 }
+
+
