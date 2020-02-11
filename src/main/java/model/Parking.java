@@ -1,77 +1,61 @@
 package model;
 
-import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
 
-import java.util.*;
 
 public class Parking {
-    public int parkingSize;
-    public List<Car> carMap = new ArrayList<>();
-    Random random = new Random(1);
+    private int parkingSize;
+    private List<Car> carList = new ArrayList<>();
+    private Random random = new Random(1);
 
 
-    public void removeCarsFromList(List<Car> cars) {
-        for (int i = 0; i < cars.size(); i += 1) {
-            System.out.println("I'm here");
-            cars.get(i).setLifeCycle(cars.get(i).getLifeCycle() + 1);
-            cars.set(i, cars.get(i));
-        }
-
-        cars.removeIf(car -> car.getLifeCycle() < 0);
+    private boolean isEmptyParking() {
+        return carList.size() < parkingSize;
     }
 
-    public boolean isEmptyParking() {
-        return carMap.size() < parkingSize;
-    }
-
-    public void addCarsToList() {
-
-
+    private void addCarsToList() {
         if (isEmptyParking()) {
-            System.out.println(isEmptyParking());
-            int lifeCycle = random.nextInt(10);
-            System.out.println(lifeCycle);
-            carMap.add(new Car(lifeCycle));
-           // removeCarsFromList(carMap);
-            System.out.println("Машина добавлена, в парковке " + carMap.size() + " машин");
+
+            carList.add(new Car(random.nextInt(10)));
+            System.out.println("Car added, in parking " + carList.size() + " cars");
             responseAgain();
         } else {
-            System.out.println("Парковка заполнена ");
-          //  carMap.forEach(car -> System.out.println("Через " + car.getLifeCycle() + " освободится место"));
-            System.out.println(isEmptyParking());
-
-            while (!isEmptyParking()){
-                for (int i = 0; i < carMap.size(); i += 1) {
-                    System.out.println("I'm here");
-                    carMap.get(i).setLifeCycle(carMap.get(i).getLifeCycle() - 1);
-                    carMap.set(i, carMap.get(i));
-                }
-
-                carMap.removeIf(car -> car.getLifeCycle() < 0);
-            }
-
-            System.out.println("Exit loop");
-            responseAgain();
+            System.out.println("Parking is full ");
+            carList.forEach(car -> System.out.println("Through " + car.getLifeCycle() + " free parking space"));
+            getEmptyParking();
         }
     }
 
 
-    public void getEmptyParking() {
+    private void getEmptyParking() {
 
+        System.out.println("Please wait until the place is free");
 
+        while (!isEmptyParking()) {
+            for (int i = 0; i < carList.size(); i++) {
+                carList.get(i).setLifeCycle(carList.get(i).getLifeCycle() - 1);
+                carList.set(i, carList.get(i));
+            }
+            carList.removeIf(car -> car.getLifeCycle() <= 0);
+        }
 
+        System.out.println("Parking freed up, free spaces " + (getParkingSize() - carList.size()));
+        responseAgain();
     }
 
-
-    public void responseAgain() {
+    void responseAgain() {
         Scanner response = new Scanner(System.in);
-        System.out.println("Хотите еще добавить?");
+        System.out.println("You want to add car?");
         String userResponse = response.nextLine();
 
-        if (userResponse.equals("да")) {
+        if (userResponse.equals("Yes")) {
             addCarsToList();
         } else {
-            System.exit(1);
+            System.out.println("Invalid input, please try again");
+            responseAgain();
         }
     }
 

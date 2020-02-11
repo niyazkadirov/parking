@@ -1,11 +1,9 @@
 package model;
 
-import java.util.List;
-
 public class Car {
-    public int lifeCycle;
+    private int lifeCycle;
 
-    public Car(int lifeCycle) {
+    Car(int lifeCycle) {
         this.lifeCycle = lifeCycle;
     }
 
