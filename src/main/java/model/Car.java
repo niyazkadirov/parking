@@ -1,17 +1,13 @@
 package model;
 
+
+import lombok.Data;
+
+@Data
 public class Car {
-    private int lifeCycle;
+    private int parkingExpired;
 
-    Car(int lifeCycle) {
-        this.lifeCycle = lifeCycle;
-    }
-
-    public int getLifeCycle() {
-        return lifeCycle;
-    }
-
-    public void setLifeCycle(int lifeCycle) {
-        this.lifeCycle = lifeCycle;
+    public Car(int parkingExpired) {
+        this.parkingExpired = parkingExpired;
     }
 }
