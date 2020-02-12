@@ -42,7 +42,9 @@ public class ParkingServiceImpl implements ParkingService {
                 emptySeat = randomNumber - (getParkingSize() - carList.size());
 
                 carList.add(new Car(random.nextInt(100)));
-            } else {
+            }
+
+            if (!isEmptyParking()) {
 
                 System.out.println();
                 for (int i = 1; i <= emptySeat; i++) {
