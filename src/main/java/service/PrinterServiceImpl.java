@@ -25,18 +25,11 @@ public class PrinterServiceImpl implements PrinterService {
             parkingService.setParkingSize(getParkingSize);
             parkingService.addFewCarsToListAndStopByEnter();
 
-            Scanner scanner = new Scanner(System.in);
-            scanner.nextLine();
 
         } catch (InputMismatchException | InterruptedException e) {
             System.out.println("Invalid input, please try again");
             printQuestionToConsole(parkingService);
         }
-    }
-
-    public void printParkingInfo(List<Car> cars) {
-        System.out.println("In the parking lot of " + cars.size() + " cars");
-        System.out.println("\n parking will be free in " + cars.stream().sorted().findFirst());
     }
 
 }
