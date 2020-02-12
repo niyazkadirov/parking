@@ -1,21 +1,20 @@
 package service;
 
-import lombok.Data;
 import model.Car;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
-@Data
 public class ParkingServiceImpl implements ParkingService {
     public static int parkingSize;
+    private static boolean checkEnter = true;
+    private static int counter;
+    private static int subCounter;
+    private static int leaveCars;
+    private Scanner scanner = new Scanner(System.in);
     private List<Car> carList = new ArrayList<>();
     private Random random = new Random(1);
-    private static boolean checkEnter = true;
     private PrinterService printerService;
-
 
     @Override
     public boolean isEmptyParking() {
@@ -56,7 +55,7 @@ public class ParkingServiceImpl implements ParkingService {
         responseAgain();
     }
 
-    public void setCheckEnter(){
+    public void setCheckEnter() {
         checkEnter = false;
     }
 
@@ -64,27 +63,54 @@ public class ParkingServiceImpl implements ParkingService {
     @Override
     public void addFewCarsToListAndStopByEnter() throws InterruptedException {
 
+        int randomNumber = random.nextInt((getParkingSize() / 3) + 1);
 
-        while (checkEnter) {
-            Thread.sleep(2000);
-            if (isEmptyParking()) {
-                carList.add(new Car(random.nextInt(10)));
-                System.out.println("Car added, in parking " + carList.size() + " cars");
+        while (true) {
+            String s = scanner.nextLine();
+
+            if (s.isEmpty()) {
+                for (int i = 0; i < carList.size(); i++) {
+                    carList.get(i).setParkingExpired(carList.get(i).getParkingExpired() - 1);
+                    carList.set(i, carList.get(i));
+                }
+
+                if (carList.removeIf(car -> car.getParkingExpired() <= 0)) {
+                    leaveCars++;
+                }
+
+                counter++;
+                subCounter++;
+                if (randomNumber == subCounter) {
+                    System.out.println();
+                    System.out.println(leaveCars + " cars left the parking lot ");
+                    System.out.println((parkingSize - carList.size()) + " more parking spaces left");
+                    subCounter = 0;
+                }
+
+                if (isEmptyParking()) {
+                    carList.add(new Car(random.nextInt(100)));
+                } else {
+                    System.out.println("Parking is full ");
+                    List<Integer> collect = carList.stream().map(Car::getParkingExpired).collect(Collectors.toList());
+                    System.out.println("Parking will be free in " + Collections.min(collect) + " iteration \n");
+                    carList.forEach(car -> System.out.println("Parking expired: " + car.getParkingExpired()));
+                    System.out.println("Wait....");
+                    Thread.sleep(1500);
+                    clearParking();
+                }
             } else {
-                System.out.println("Parking is full ");
-                carList.forEach(car -> System.out.println("Through " + car.getParkingExpired() + " free parking space"));
-                clearParking();
+                break;
             }
         }
-
-        printParkingInfo(carList);
     }
+
+    //printParkingInfo(carList);
 
 
     @Override
     public void clearParking() {
 
-        System.out.println("Please wait until the place is free");
+        //  System.out.println("Please wait until the place is free");
 
         while (!isEmptyParking()) {
             for (int i = 0; i < carList.size(); i++) {
@@ -95,7 +121,7 @@ public class ParkingServiceImpl implements ParkingService {
         }
 
         System.out.println("Parking freed up, free spaces " + (getParkingSize() - carList.size()));
-        responseAgain();
+        // responseAgain();
     }
 
 
@@ -119,7 +145,7 @@ public class ParkingServiceImpl implements ParkingService {
         }
     }
 
-    public void printParkingInfo(List<Car> cars){
+    public void printParkingInfo(List<Car> cars) {
         System.out.println("In the parking lot of " + cars.size() + " cars");
     }
 
