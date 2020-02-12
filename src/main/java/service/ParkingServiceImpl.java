@@ -8,13 +8,11 @@ import java.util.stream.Collectors;
 public class ParkingServiceImpl implements ParkingService {
     public static int parkingSize;
     private static boolean checkEnter = true;
-    private static int counter;
     private static int subCounter;
-    private static int leaveCars;
+    private static int emptySeat;
     private Scanner scanner = new Scanner(System.in);
     private List<Car> carList = new ArrayList<>();
     private Random random = new Random(1);
-    private PrinterService printerService;
 
     @Override
     public boolean isEmptyParking() {
@@ -55,56 +53,50 @@ public class ParkingServiceImpl implements ParkingService {
         responseAgain();
     }
 
-    public void setCheckEnter() {
-        checkEnter = false;
-    }
-
 
     @Override
     public void addFewCarsToListAndStopByEnter() throws InterruptedException {
 
-        int randomNumber = random.nextInt((getParkingSize() / 3) + 1);
 
         while (true) {
-            String s = scanner.nextLine();
 
-            if (s.isEmpty()) {
-                for (int i = 0; i < carList.size(); i++) {
-                    carList.get(i).setParkingExpired(carList.get(i).getParkingExpired() - 1);
-                    carList.set(i, carList.get(i));
-                }
-
-                if (carList.removeIf(car -> car.getParkingExpired() <= 0)) {
-                    leaveCars++;
-                }
-
-                counter++;
-                subCounter++;
-                if (randomNumber == subCounter) {
-                    System.out.println();
-                    System.out.println(leaveCars + " cars left the parking lot ");
-                    System.out.println((parkingSize - carList.size()) + " more parking spaces left");
-                    subCounter = 0;
-                }
-
-                if (isEmptyParking()) {
-                    carList.add(new Car(random.nextInt(100)));
-                } else {
-                    System.out.println("Parking is full ");
-                    List<Integer> collect = carList.stream().map(Car::getParkingExpired).collect(Collectors.toList());
-                    System.out.println("Parking will be free in " + Collections.min(collect) + " iteration \n");
-                    carList.forEach(car -> System.out.println("Parking expired: " + car.getParkingExpired()));
-                    System.out.println("Wait....");
-                    Thread.sleep(1500);
-                    clearParking();
-                }
-            } else {
-                break;
+            int randomNumber = random.nextInt((getParkingSize() / 3) + 1);
+            if (getParkingSize() <= 3) {
+                randomNumber = 1;
             }
+
+            for (int i = 0; i < carList.size(); i++) {
+                carList.get(i).setParkingExpired(carList.get(i).getParkingExpired() - 1);
+                carList.set(i, carList.get(i));
+            }
+
+            carList.removeIf(car -> car.getParkingExpired() <= 0);
+
+            subCounter++;
+            if (randomNumber == subCounter) {
+                System.out.println();
+                subCounter = 0;
+            }
+
+            if (isEmptyParking()) {
+                System.out.println("Number of parking spaces: " + (getParkingSize() - carList.size()));
+                emptySeat = randomNumber - (getParkingSize() - carList.size());
+
+                carList.add(new Car(random.nextInt(100)));
+
+            } else {
+                for (int i = 1; i <= emptySeat; i++) {
+                    System.out.println("Parking full");
+                }
+                List<Integer> collect = carList.stream().map(Car::getParkingExpired).collect(Collectors.toList());
+                System.out.println("Parking will be empty in " + Collections.min(collect) + " later iteration \n");
+                carList.forEach(car -> System.out.println("Car life : " + car.getParkingExpired() +
+                        "  Parking place: " + carList.indexOf(car)));
+                System.out.println();
+            }
+            Thread.sleep(200);
         }
     }
-
-    //printParkingInfo(carList);
 
 
     @Override

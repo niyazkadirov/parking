@@ -13,11 +13,11 @@ public class PrinterServiceImpl implements PrinterService {
     public void printQuestionToConsole(ParkingServiceImpl parkingService) {
 
         Scanner parkingSize = new Scanner(System.in);
-        System.out.println("Enter parking size (min size 3)");
+        System.out.println("Enter parking size:");
         try {
             int getParkingSize = parkingSize.nextInt();
 
-            if (getParkingSize < 3) {
+            if (getParkingSize < 0) {
                 System.out.println("Invalid input, please try again");
                 printQuestionToConsole(parkingService);
             }
@@ -27,7 +27,6 @@ public class PrinterServiceImpl implements PrinterService {
 
             Scanner scanner = new Scanner(System.in);
             scanner.nextLine();
-            parkingService.setCheckEnter();
 
         } catch (InputMismatchException | InterruptedException e) {
             System.out.println("Invalid input, please try again");
@@ -37,7 +36,7 @@ public class PrinterServiceImpl implements PrinterService {
 
     public void printParkingInfo(List<Car> cars) {
         System.out.println("In the parking lot of " + cars.size() + " cars");
-        System.out.println("parking will be free in " + cars.stream().sorted().findFirst());
+        System.out.println("\n parking will be free in " + cars.stream().sorted().findFirst());
     }
 
 }
