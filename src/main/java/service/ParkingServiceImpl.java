@@ -10,7 +10,6 @@ import java.util.stream.Collectors;
 
 public class ParkingServiceImpl implements ParkingService {
     private static int parkingSize;
-    private static int subCounter;
     private static int emptySeat;
     private List<Car> carList = new ArrayList<>();
     private Random random = new Random(1);
@@ -22,7 +21,7 @@ public class ParkingServiceImpl implements ParkingService {
 
 
     @Override
-    public void addFewCarsToListAndStopByEnter() throws InterruptedException {
+    public void addCarsToList() throws InterruptedException {
 
         while (true) {
             int randomNumber = random.nextInt((getParkingSize() / 3) + 1);
@@ -37,11 +36,6 @@ public class ParkingServiceImpl implements ParkingService {
 
             carList.removeIf(car -> car.getParkingExpired() <= 0);
 
-            subCounter++;
-            if (randomNumber == subCounter) {
-                System.out.println();
-                subCounter = 0;
-            }
 
             if (isEmptyParking()) {
                 System.out.println("Number of parking spaces: " + (getParkingSize() - carList.size()));
@@ -55,12 +49,11 @@ public class ParkingServiceImpl implements ParkingService {
                     System.out.println("Parking full");
                 }
                 List<Integer> collect = carList.stream().map(Car::getParkingExpired).collect(Collectors.toList());
-                System.out.println("Parking will be empty in " + Collections.min(collect) + " later iteration \n");
-                carList.forEach(car -> System.out.println("Car life : " + car.getParkingExpired() +
+                System.out.println("\n Parking will be empty in " + Collections.min(collect) + " later iteration \n");
+                carList.stream().distinct().forEach(car -> System.out.println("Car life : " + car.getParkingExpired() +
                         "  Parking place: " + carList.indexOf(car)));
                 System.out.println();
             }
-            Thread.sleep(200);
         }
     }
 

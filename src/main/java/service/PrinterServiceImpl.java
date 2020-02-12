@@ -1,9 +1,6 @@
 package service;
 
-import model.Car;
-
 import java.util.InputMismatchException;
-import java.util.List;
 import java.util.Scanner;
 
 public class PrinterServiceImpl implements PrinterService {
@@ -23,7 +20,7 @@ public class PrinterServiceImpl implements PrinterService {
             }
 
             parkingService.setParkingSize(getParkingSize);
-            parkingService.addFewCarsToListAndStopByEnter();
+            parkingService.addCarsToList();
 
 
         } catch (InputMismatchException | InterruptedException e) {
