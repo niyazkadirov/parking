@@ -41,7 +41,8 @@ public class PrinterService {
         int remainingIterate = Integer.MAX_VALUE;
 
         for (Car car : carList) {
-            System.out.println("Iteration before leaving the parking lot : " + car.getRemainingIterate() + "  Parking place: " + carList.indexOf(car));
+            System.out.println("Iteration before leaving the parking lot : " + car.getRemainingIterate() +
+                                "  Parking place: " + carList.indexOf(car));
             if (remainingIterate > car.getRemainingIterate()) {
                 remainingIterate = car.getRemainingIterate();
             }

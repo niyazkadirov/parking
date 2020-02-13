@@ -9,7 +9,7 @@ public interface ParkingService {
 
    int getParkingSizeFromConsole();
 
-    void decrementCarList(List<Car> carList);
+    void decrementAndRemoveCarList(List<Car> carList);
 
     int getRandomNumber(Parking parking);
 
