@@ -23,7 +23,7 @@ public class PrinterServiceImpl implements PrinterService {
             parkingService.addCarsToList();
 
 
-        } catch (InputMismatchException | InterruptedException e) {
+        } catch (InputMismatchException e) {
             System.out.println("Invalid input, please try again");
             printQuestionToConsole(parkingService);
         }

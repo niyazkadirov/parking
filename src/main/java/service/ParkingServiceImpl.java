@@ -2,10 +2,7 @@ package service;
 
 import model.Car;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class ParkingServiceImpl implements ParkingService {
@@ -21,38 +18,64 @@ public class ParkingServiceImpl implements ParkingService {
 
 
     @Override
-    public void addCarsToList() throws InterruptedException {
+    public void addCarsToList() {
 
+        Scanner scanner = new Scanner(System.in);
         while (true) {
-            int randomNumber = random.nextInt((getParkingSize() / 3) + 1);
-            if (getParkingSize() <= 3) {
-                randomNumber = 1;
-            }
-
-            for (int i = 0; i < carList.size(); i++) {
-                carList.get(i).setParkingExpired(carList.get(i).getParkingExpired() - 1);
-                carList.set(i, carList.get(i));
-            }
-
-            carList.removeIf(car -> car.getParkingExpired() <= 0);
+            String s = scanner.nextLine();
+            if (s.isEmpty()) {
 
 
-            if (isEmptyParking()) {
-                System.out.println("Number of parking spaces: " + (getParkingSize() - carList.size()));
-                emptySeat = randomNumber - (getParkingSize() - carList.size());
+                int randomNumber;
+                if (getParkingSize() <= 5) {
+                    randomNumber = 1;
+                } else {
+                    int i = getParkingSize() / 3;
+                    randomNumber = random.nextInt(i); //nextInt от 1 до n (+1 делает включительно)
+                    while (randomNumber == 0){
+                        randomNumber = random.nextInt(i); //nextInt от 1 до n (+1 делает включительно)
+                    }
+                }
 
-                carList.add(new Car(random.nextInt(100)));
-            }
 
-            if (!isEmptyParking()) {
+                if (isEmptyParking()) {
 
-                System.out.println();
+                    for (int i = 1; i <= randomNumber; i++) {
+                        if (isEmptyParking()) {
+                            carList.add(new Car(random.nextInt(100)));
+                        }
+                    }
+
+//                    System.out.println("Number of parking spaces: " + ((getParkingSize() - carList.size()) - 1));
+
+                    emptySeat = randomNumber - (getParkingSize() - carList.size());
+
+//                    carList.stream().distinct().forEach(car -> System.out.println("Iteration before leaving the parking lot : " + car.getParkingExpired() +
+//                            "  Parking place: " + carList.indexOf(car)));
+
+
+                }
+
+                // System.out.println("Number of parking spaces: " + ((getParkingSize() - carList.size())));
+
+                for (Car car : carList) {
+                    car.setParkingExpired(car.getParkingExpired() - 1);
+                }
+
+                carList.removeIf(car -> car.getParkingExpired() <= 0);
+
+                System.out.println("Number of parking spaces: " + ((getParkingSize() - carList.size())));
+
+
                 for (int i = 1; i <= emptySeat; i++) {
                     System.out.println("Parking full");
                 }
+
                 List<Integer> collect = carList.stream().map(Car::getParkingExpired).collect(Collectors.toList());
-                System.out.println("\n Parking will be empty in " + Collections.min(collect) + " later iteration \n");
-                carList.stream().distinct().forEach(car -> System.out.println("Car life : " + car.getParkingExpired() +
+                if (!collect.isEmpty()) {
+                        System.out.println("Parking will be empty in " + Collections.min(collect) + " later iteration");
+                }
+                carList.stream().distinct().forEach(car -> System.out.println("Iteration before leaving the parking lot : " + car.getParkingExpired() +
                         "  Parking place: " + carList.indexOf(car)));
                 System.out.println();
             }
