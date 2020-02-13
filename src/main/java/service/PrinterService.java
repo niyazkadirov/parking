@@ -9,20 +9,20 @@ import java.util.List;
 public class PrinterService {
 
 
-    public static void printQuestionToConsole(ParkingService parkingService) {
+    public static void printQuestionToConsole(ParkingServiceImpl parkingServiceImpl) {
 
         System.out.println("Enter parking size:");
-        int parkingSizeFromConsole = parkingService.getParkingSizeFromConsole();
+        int parkingSizeFromConsole = parkingServiceImpl.getParkingSizeFromConsole();
 
         try {
             if (parkingSizeFromConsole <= 0) {
                 System.out.println("Invalid input, please try again");
-                printQuestionToConsole(parkingService);
+                printQuestionToConsole(parkingServiceImpl);
             }
-            parkingService.parkingHandler();
+            parkingServiceImpl.parkingHandler();
         } catch (InputMismatchException e) {
             System.out.println("Invalid input, please try again");
-            printQuestionToConsole(parkingService);
+            printQuestionToConsole(parkingServiceImpl);
         }
     }
 
