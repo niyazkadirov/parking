@@ -14,11 +14,7 @@ public class RandomNumberHandler {
             randomNumber = 1;
         } else {
             int i = parkingSize / 3;
-
             randomNumber = random.nextInt(i);
-            while (randomNumber == 0) {
-                randomNumber = random.nextInt(i);
-            }
         }
         return randomNumber;
     }

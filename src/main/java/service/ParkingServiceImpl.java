@@ -9,7 +9,7 @@ import java.util.stream.Collectors;
 public class ParkingServiceImpl implements ParkingService {
     private static int parkingSize;
     private List<Car> carList = new ArrayList<>();
-    private Random random = new Random(1);
+    private Random random = new Random(System.currentTimeMillis());
     private RandomNumberHandler numberHandler = new RandomNumberHandler();
 
     @Override

@@ -14,7 +14,7 @@ public class PrinterServiceImpl implements PrinterService {
         try {
             int getParkingSize = parkingSize.nextInt();
 
-            if (getParkingSize < 0) {
+            if (getParkingSize <= 0) {
                 System.out.println("Invalid input, please try again");
                 printQuestionToConsole(parkingService);
             }
