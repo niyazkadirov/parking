@@ -3,10 +3,7 @@ package service;
 import model.Car;
 import model.Parking;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 import static service.PrinterService.*;
 
@@ -36,9 +33,9 @@ public class ParkingServiceImpl implements ParkingService {
             int randomNumber = getRandomNumber(parking);
             generateCarsAndAddToList(carList, randomNumber);
 
-
-            decrementCarList(carList);
-            carList.removeIf(car -> car.getRemainingIterate() <= 0);
+            //Обьединить 2 поля
+            decrementAndRemoveCarList(carList);
+            //carList.removeIf(car -> car.getRemainingIterate() <= 0);
 
             printNumberParkingSpace(parking, carList);
 
@@ -57,9 +54,13 @@ public class ParkingServiceImpl implements ParkingService {
     }
 
     @Override
-    public void decrementCarList(List<Car> carList) {
-        for (Car car : carList) {
+    public void decrementAndRemoveCarList(List<Car> carList) {
+        for (Iterator<Car> iterator = carList.iterator(); iterator.hasNext(); ) {
+            Car car = iterator.next();
             car.setRemainingIterate(car.getRemainingIterate() - 1);
+            if (car.getRemainingIterate() <= 0) {
+                iterator.remove();
+            }
         }
     }
 
