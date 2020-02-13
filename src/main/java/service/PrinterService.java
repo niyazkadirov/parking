@@ -45,8 +45,11 @@ public class PrinterService {
             if (remainingIterate > car.getRemainingIterate()) {
                 remainingIterate = car.getRemainingIterate();
             }
+
         }
-        System.out.println("Parking will be free in " + remainingIterate + " later iteration");
+        if (remainingIterate != Integer.MAX_VALUE) {
+            System.out.println("Parking will be free in " + remainingIterate + " later iteration");
+        }
     }
 
 
