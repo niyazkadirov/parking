@@ -86,7 +86,7 @@ public class ParkingServiceImpl implements ParkingService {
             if (isHasFreePlace()) {
                 continue;
             }
-            carList.add(new Car(random.nextInt(10)));
+            carList.add(new Car(random.nextInt(50)));
         }
     }
 
