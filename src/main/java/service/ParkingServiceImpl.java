@@ -53,7 +53,7 @@ public class ParkingServiceImpl implements ParkingService {
 
 
                 for (int i = 1; i <= emptySeat; i++) {
-                    System.out.println("Parking full");
+                    System.out.println("Sorry, we don't have any openings.");
                 }
 
                 List<Integer> collect = carList.stream().map(Car::getParkingExpired).collect(Collectors.toList());
@@ -62,7 +62,8 @@ public class ParkingServiceImpl implements ParkingService {
                 }
                 carList.stream().distinct().forEach(car -> System.out.println("Iteration before leaving the parking lot : " + car.getParkingExpired() +
                         "  Parking place: " + carList.indexOf(car)));
-                System.out.println();
+
+
             }
         }
     }
