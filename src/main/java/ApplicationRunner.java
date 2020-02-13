@@ -1,16 +1,12 @@
-import service.ParkingServiceImpl;
-import service.PrinterService;
-import service.PrinterServiceImpl;
-
+import model.Parking;
+import service.ParkingService;
+import static service.PrinterService.printQuestionToConsole;
 
 public class ApplicationRunner {
     public static void main(String[] args) {
-        PrinterService printerService = new PrinterServiceImpl();
-        ParkingServiceImpl parkingService = new ParkingServiceImpl();
+        ParkingService parkingService = new ParkingService();
 
-        //Entry
-
-        printerService.printQuestionToConsole(parkingService);
+        printQuestionToConsole(parkingService);
     }
 }
 
