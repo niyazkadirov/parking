@@ -17,13 +17,13 @@ public class ParkingService {
 
 
     public boolean isFreePlace() {
-        return carList.size() < parking.getParkingSize();
+        return carList.size() >= parking.getParkingSize();
     }
 
 
 
 
-    public void addCarsToList() {
+    public void parkingHandler() {
 
         while (true) {
             String s = scanner.nextLine();
@@ -32,29 +32,16 @@ public class ParkingService {
             }
 
             int randomNumber = getRandomNumber(parking);
-
-            if (isFreePlace()) {
-                for (int i = 1; i <= randomNumber; i++) {
-
-                    if (!isFreePlace()) {
-                        continue;
-                    }
-                    carList.add(new Car(random.nextInt(10)));
-                }
-            }
+            generateCarsAndAddToList(carList, randomNumber);
 
 
             decrementCarList(carList);
-
             carList.removeIf(car -> car.getRemainingIterate() <= 0);
 
             printNumberParkingSpace(parking, carList);
 
             int emptyPlace = randomNumber - (parking.getParkingSize() - carList.size());
-
-
             printNotPlaceInParking(emptyPlace);
-
             printParkingPlaceInfo(carList);
         }
     }
@@ -83,15 +70,17 @@ public class ParkingService {
         return randomNumber;
     }
 
-    public void generateCarsForList1(List<Class>T, int randomNumber){
+    public void generateCarsAndAddToList(List<Car> carList, int randomNumber){
         if (isFreePlace()) {
-            for (int i = 1; i <= randomNumber; i++) {
+            return;
+        }
+        for (int i = 1; i <= randomNumber; i++) {
 
-                if (!isFreePlace()) {
-                    continue;
-                }
-                carList.add(new Car(random.nextInt(10)));
+            if (isFreePlace()) {
+                continue;
             }
+            carList.add(new Car(random.nextInt(10)));
         }
     }
+
 }

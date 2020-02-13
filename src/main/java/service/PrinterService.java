@@ -19,7 +19,7 @@ public class PrinterService {
                 System.out.println("Invalid input, please try again");
                 printQuestionToConsole(parkingService);
             }
-            parkingService.addCarsToList();
+            parkingService.parkingHandler();
         } catch (InputMismatchException e) {
             System.out.println("Invalid input, please try again");
             printQuestionToConsole(parkingService);
@@ -46,7 +46,7 @@ public class PrinterService {
                 remainingIterate = car.getRemainingIterate();
             }
         }
-        System.out.println("Parking will be empty in " + remainingIterate + " later iteration");
+        System.out.println("Parking will be free in " + remainingIterate + " later iteration");
     }
 
 
