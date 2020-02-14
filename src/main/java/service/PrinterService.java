@@ -42,11 +42,10 @@ public class PrinterService {
 
         for (Car car : carList) {
             System.out.println("Iteration before leaving the parking lot : " + car.getRemainingIterate() +
-                                "  Parking place: " + carList.indexOf(car));
+                    "  Parking place: " + carList.indexOf(car));
             if (remainingIterate > car.getRemainingIterate()) {
                 remainingIterate = car.getRemainingIterate();
             }
-
         }
         if (remainingIterate != Integer.MAX_VALUE) {
             System.out.println("Parking will be free in " + remainingIterate + " later iteration");
