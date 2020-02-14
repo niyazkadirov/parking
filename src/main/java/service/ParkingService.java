@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface ParkingService {
 
-   int getParkingSizeFromConsole();
+    int getParkingSizeFromConsole();
 
     void decrementAndRemoveCarList(List<Car> carList);
 
@@ -18,4 +18,10 @@ public interface ParkingService {
     boolean isHasFreePlace();
 
     void parkingHandler();
+
+    void clearAll(List<Car> carList);
+
+    boolean clearByIndex(String command);
+
+    void emptyMoveHandler();
 }
