@@ -3,10 +3,7 @@ package service;
 import model.Car;
 import model.Parking;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 import static service.PrinterService.*;
 
@@ -29,7 +26,6 @@ public class ParkingServiceImpl implements ParkingService {
 
         while (true) {
 
-
             String command = scanner.nextLine();
             switch (command) {
                 case ("status"):
@@ -37,7 +33,7 @@ public class ParkingServiceImpl implements ParkingService {
                     continue;
 
                 case ("help"):
-                 printHelpCommands();
+                    printHelpCommands();
                     continue;
 
                 case (""):
@@ -70,11 +66,19 @@ public class ParkingServiceImpl implements ParkingService {
     }
 
     @Override
-    public int getParkingSizeFromConsole() {
+    public boolean validateInputFromConsole() {
+        try {
+            int parkingSize = scanner.nextInt();
+            parking.setParkingSize(parkingSize);
 
-        int parkingSizeFromConsole = scanner.nextInt();
-        parking.setParkingSize(parkingSizeFromConsole);
-        return parkingSizeFromConsole;
+            if (parkingSize <= 0) {
+                return false;
+            }
+        } catch (InputMismatchException ignored) {
+            scanner.next();
+            return false;
+        }
+        return true;
     }
 
     @Override
@@ -131,16 +135,14 @@ public class ParkingServiceImpl implements ParkingService {
         return false;
     }
 
-    public void printHelpCommands(){
+    @Override
+    public void printHelpCommands() {
         System.out.println(
                 " -------------------------------------------------------------------------------- \n" +
-                "| <status> - Displays all current cars with their lifetime and parking number.   |\n" +
-                "| <clear all> - completely cleans parking.                                       |\n" +
-                "| <clear [index]> - cleans parking by id                                         |\n" +
-                " --------------------------------------------------------------------------------"
-
-
+                        "| <status> - Displays all current cars with their lifetime and parking number.   |\n" +
+                        "| <clear all> - completely cleans parking.                                       |\n" +
+                        "| <clear [index]> - cleans parking by id                                         |\n" +
+                        " --------------------------------------------------------------------------------"
         );
-
     }
 }
