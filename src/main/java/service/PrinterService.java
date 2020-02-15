@@ -3,9 +3,7 @@ package service;
 import model.Car;
 import model.Parking;
 
-import java.util.InputMismatchException;
 import java.util.List;
-import java.util.Scanner;
 
 public class PrinterService {
 
@@ -14,15 +12,10 @@ public class PrinterService {
 
         System.out.println("Enter parking size:");
 
-        int parkingSizeFromConsole = parkingServiceImpl.getParkingSizeFromConsole();
-        try {
-            if (parkingSizeFromConsole <= 0) {
-                System.out.println("Invalid input, please try again");
-                printQuestionToConsole(parkingServiceImpl);
-            }
+        if (parkingServiceImpl.validateInputFromConsole() ) {
             parkingServiceImpl.parkingHandler();
-        } catch (InputMismatchException e) {
-            System.out.println("Invalid input, please try again");
+        } else {
+            System.out.println("Invalid command, please try again");
             printQuestionToConsole(parkingServiceImpl);
         }
     }
