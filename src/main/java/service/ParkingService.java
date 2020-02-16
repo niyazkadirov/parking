@@ -5,7 +5,7 @@ import model.Parking;
 
 import java.util.List;
 
-public interface ParkingService {
+interface ParkingService {
 
     boolean validateInputFromConsole();
 

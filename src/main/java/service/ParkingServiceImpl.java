@@ -10,10 +10,10 @@ import static service.PrinterService.*;
 
 public class ParkingServiceImpl implements ParkingService {
     private static final int UPPER_RANGE_RANDOM = 50;
-    private List<Car> carList = new ArrayList<>();
-    private Random random = new Random(System.currentTimeMillis());
-    private Parking parking = new Parking();
-    private Scanner scanner = new Scanner(System.in);
+    private final List<Car> carList = new ArrayList<>();
+    private final Random random = new Random(System.currentTimeMillis());
+    private final Parking parking = new Parking();
+    private final Scanner scanner = new Scanner(System.in);
 
     @Override
     public boolean isHasFreePlace() {
@@ -107,7 +107,7 @@ public class ParkingServiceImpl implements ParkingService {
 
 
     @Override
-    public void generateCarsAndAddToList(List<Car> carList, int randomNumber) {
+    public void generateCarsAndAddToList(List<Car> carList, final int randomNumber) {
         for (int i = 1; i <= randomNumber; i++) {
             if (isHasFreePlace()) {
                 int remainingIterate = random.nextInt(UPPER_RANGE_RANDOM);
@@ -118,7 +118,7 @@ public class ParkingServiceImpl implements ParkingService {
 
     @Override
     public void clearAll(List<Car> carList) {
-        carList.removeAll(carList);
+        carList.clear();
     }
 
     @Override
