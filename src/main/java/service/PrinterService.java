@@ -8,15 +8,15 @@ import java.util.List;
 public class PrinterService {
 
 
-    public static void printQuestionToConsole(ParkingServiceImpl parkingServiceImpl) {
+    public static void printQuestionToConsole(ParkingService parkingService) {
 
         System.out.println("Enter parking size:");
 
-        if (parkingServiceImpl.validateInputFromConsole() ) {
-            parkingServiceImpl.parkingHandler();
+        if (parkingService.validateInputFromConsole() ) {
+            parkingService.parkingHandler();
         } else {
             System.out.println("Invalid command, please try again");
-            printQuestionToConsole(parkingServiceImpl);
+            printQuestionToConsole(parkingService);
         }
     }
 
@@ -27,7 +27,7 @@ public class PrinterService {
         return numberParkingSpace;
     }
 
-    static void printNotPlaceInParking(int emptyPlace) {
+    static void printNotPlaceInParking(final int emptyPlace) {
         for (int i = 1; i <= emptyPlace; i++) {
             System.out.println("Sorry, we don't have any openings.");
         }
