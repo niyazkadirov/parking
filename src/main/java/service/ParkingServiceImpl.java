@@ -119,14 +119,18 @@ public class ParkingServiceImpl implements ParkingService {
     @Override
     public void clearAll(List<Car> carList) {
         carList.clear();
+        System.out.println("parking successfully cleared");
+        printParkingPlaceInfo(carList);
     }
 
     @Override
-    public boolean clearByIndex(String command) {
-        String[] arrCommand = command.split(" ");
+    public boolean clearByIndex(String index) {
+        String[] arrCommand = index.split(" ");
         if (arrCommand[0].equals("clear")) {
             try {
                 carList.remove(Integer.parseInt(arrCommand[1]));
+                System.out.println("Car under index " + arrCommand[1] + " was successfully deleted");
+                printParkingPlaceInfo(carList);
                 return true;
             } catch (IndexOutOfBoundsException | NumberFormatException ignored) {
                 System.out.println("Элемент не найден");
@@ -141,7 +145,7 @@ public class ParkingServiceImpl implements ParkingService {
                 " -------------------------------------------------------------------------------- \n" +
                         "| <status> - Displays all current cars with their lifetime and parking number.   |\n" +
                         "| <clear all> - completely cleans parking.                                       |\n" +
-                        "| <clear [index]> - cleans parking by id                                         |\n" +
+                        "| <clear [index]> - cleans parking by index                                         |\n" +
                         " --------------------------------------------------------------------------------"
         );
     }
