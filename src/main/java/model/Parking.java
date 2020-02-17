@@ -8,4 +8,5 @@ import lombok.Setter;
 @Setter
 public class Parking {
     private int parkingSize;
+
 }

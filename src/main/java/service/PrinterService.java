@@ -23,7 +23,7 @@ public class PrinterService {
 
     static int printAndGetNumberParkingSpace(Parking parking, List<Car> carList) {
         int numberParkingSpace = parking.getParkingSize() - carList.size();
-        System.out.println("Number of parking spaces: " + numberParkingSpace);
+        System.out.println("Amount of free parking slots " + numberParkingSpace);
         return numberParkingSpace;
     }
 
@@ -33,9 +33,10 @@ public class PrinterService {
         }
     }
 
-    //Collapse this method
     static void printParkingPlaceInfo(List<Car> carList) {
-
+        if (carList.size() <= 0){
+            System.out.println("parking is empty");
+        }
         for (Car car : carList) {
             System.out.println("Iteration before leaving the parking lot : " + car.getRemainingIterate() +
                     "  Parking place: " + carList.indexOf(car));
