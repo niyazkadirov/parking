@@ -45,19 +45,7 @@ public class PrinterService {
     }
   }
 
-  static void printIterBeforeLeavingParking(List<ParkingPlace> carList) {
-    int remainingIterate = Integer.MAX_VALUE;
-    for (ParkingPlace parkingPlace : carList) {
-      Car car = parkingPlace.getCar();
-      if (car != null) {
-        if (remainingIterate > car.getRemainingIterate()) {
-          remainingIterate = car.getRemainingIterate();
-        }
-      }
-    }
-
-    if (remainingIterate != Integer.MAX_VALUE) {
+  static void printIterBeforeLeavingParking(int remainingIterate) {
       System.out.println("Parking will be free in " + remainingIterate + " later iteration");
-    }
   }
 }
