@@ -10,17 +10,17 @@ interface ParkingService {
 
     boolean validateInputFromConsole();
 
-    void decrementAndRemoveCarList(List<ParkingPlace> carList);
+    void decrementAndRemoveParkingPlaceList(List<ParkingPlace> parkingPlaceList);
 
     int getRandomNumber(Parking parking);
 
-    void generateCarsAndAddToParkingPlace(List<ParkingPlace> carList, final int randomNumber);
+    void generateCarsAndAddToParkingPlace(List<ParkingPlace> parkingPlaceList, final int randomNumber);
 
     boolean isHasFreePlace();
 
     void parkingHandler();
 
-    void clearAll(List<ParkingPlace> carList);
+    void clearAll(List<ParkingPlace> parkingPlaceList);
 
     boolean clearByIndex(String command);
 

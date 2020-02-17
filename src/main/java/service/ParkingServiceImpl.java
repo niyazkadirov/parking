@@ -65,18 +65,17 @@ public class ParkingServiceImpl implements ParkingService {
   @Override
   public void emptyMoveHandler() {
     int randomNumber = getRandomNumber(parking);
-    ParkingServiceImpl parkingService = new ParkingServiceImpl();
-    List<ParkingPlace> carList = parking.getParkingPlace();
-    decrementAndRemoveCarList(carList);
-    generateCarsAndAddToParkingPlace(carList, randomNumber);
+    List<ParkingPlace> parkingPlaceList = parking.getParkingPlace();
+    decrementAndRemoveParkingPlaceList(parkingPlaceList);
+    generateCarsAndAddToParkingPlace(parkingPlaceList, randomNumber);
 
 
-    parking.setFreePlace(parking.getParkingSize() - (carList.size() - getParkingPlaceSizeNull()));
+    parking.setEmptyPlace(parking.getParkingSize() - (parkingPlaceList.size() - getParkingPlaceSizeNull()));
 
-    printNumberParkingSpace(parking.getFreePlace());
-    if (parking.getFreePlace() == 0) {
-      printIterBeforeLeavingParking(carList);
-      int emptyPlace = randomNumber - (parking.getParkingSize() - carList.size());
+    printNumberParkingSpace(parking.getEmptyPlace());
+    if (parking.getEmptyPlace() == 0) {
+      printIterBeforeLeavingParking(parkingPlaceList);
+      int emptyPlace = randomNumber - (parking.getParkingSize() - parkingPlaceList.size());
       printNotPlaceInParking(emptyPlace);
     }
   }
@@ -98,7 +97,7 @@ public class ParkingServiceImpl implements ParkingService {
   }
 
   @Override
-  public void decrementAndRemoveCarList(List<ParkingPlace> carList) {
+  public void decrementAndRemoveParkingPlaceList(List<ParkingPlace> carList) {
     for (int i = 0; i <= carList.size() - 1; i++) {
       List<ParkingPlace> parkingPlace = parking.getParkingPlace();
       Car car = parkingPlace.get(i).getCar();
