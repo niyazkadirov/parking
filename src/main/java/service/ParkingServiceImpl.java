@@ -13,7 +13,6 @@ import static service.PrinterService.*;
 
 public class ParkingServiceImpl implements ParkingService {
   private static final int UPPER_RANGE_RANDOM = 50;
-  // private final List<Car> carList = new ArrayList<>();
   private final Random random = new Random(System.currentTimeMillis());
   private final Parking parking = new Parking();
   private final Scanner scanner = new Scanner(System.in);
@@ -21,17 +20,6 @@ public class ParkingServiceImpl implements ParkingService {
   @Override
   public boolean isHasFreePlace() {
     return parking.getParkingSize() > parking.getParkingPlace().size();
-  }
-
-  public int getParkingSizeNull() {
-    int counter = 0;
-    List<ParkingPlace> parkingPlace = parking.getParkingPlace();
-    for (ParkingPlace place : parkingPlace) {
-      if (place.getCar() == null) {
-        counter++;
-      }
-    }
-    return counter;
   }
 
   @Override
@@ -65,15 +53,24 @@ public class ParkingServiceImpl implements ParkingService {
     }
   }
 
+
+  public int getParkingPlaceSizeNull(){
+    return (int) parking.getParkingPlace().stream()
+            .filter(parkingPlace -> parkingPlace.getCar() == null)
+            .count();
+  }
+
+
+
   @Override
   public void emptyMoveHandler() {
     int randomNumber = getRandomNumber(parking);
     ParkingServiceImpl parkingService = new ParkingServiceImpl();
     List<ParkingPlace> carList = parking.getParkingPlace();
     decrementAndRemoveCarList(carList);
-    generateCarsAndAddToList(carList, randomNumber);
+    generateCarsAndAddToParkingPlace(carList, randomNumber);
 
-    if (printAndGetNumberParkingSpace(parking, carList, parkingService) == 0) {
+    if (printNumberParkingSpace(parking, carList, getParkingPlaceSizeNull()) == 0) {
       printIterBeforeLeavingParking(carList);
       int emptyPlace = randomNumber - (parking.getParkingSize() - carList.size());
       printNotPlaceInParking(emptyPlace);
@@ -105,7 +102,6 @@ public class ParkingServiceImpl implements ParkingService {
       if (car != null) {
         car.setRemainingIterate(car.getRemainingIterate() - 1);
         if (car.getRemainingIterate() <= 0) {
-          //                carList.remove(car);
           parking.getParkingPlace().get(i).setCar(null);
         }
       }
@@ -125,14 +121,18 @@ public class ParkingServiceImpl implements ParkingService {
   }
 
   @Override
-  public void generateCarsAndAddToList(List<ParkingPlace> carList, final int randomNumber) {
+  public void generateCarsAndAddToParkingPlace(List<ParkingPlace> carList, final int randomNumber) {
     for (int i = 1; i <= randomNumber; i++) {
       int remainingIterate = random.nextInt(UPPER_RANGE_RANDOM);
       if (isHasFreePlace()) {
         List<ParkingPlace> parkingPlace = parking.getParkingPlace();
         parkingPlace.add(new ParkingPlace(new Car(remainingIterate <= 0 ? 1 : remainingIterate)));
+      } else {
+       parking.getParkingPlace().stream()
+               .filter(parkingPlace -> parkingPlace.getCar() == null)
+               .limit(randomNumber)
+               .forEach(parkingPlace -> parkingPlace.setCar(new Car(remainingIterate <= 0 ? 1 : remainingIterate)));
       }
-
     }
   }
 

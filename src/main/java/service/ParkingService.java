@@ -14,7 +14,7 @@ interface ParkingService {
 
     int getRandomNumber(Parking parking);
 
-    void generateCarsAndAddToList(List<ParkingPlace> carList, final int randomNumber);
+    void generateCarsAndAddToParkingPlace(List<ParkingPlace> carList, final int randomNumber);
 
     boolean isHasFreePlace();
 

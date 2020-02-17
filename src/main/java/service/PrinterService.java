@@ -20,8 +20,8 @@ public class PrinterService {
     }
   }
 
-  static int printAndGetNumberParkingSpace(Parking parking, List<ParkingPlace> carList, ParkingServiceImpl parkingService) {
-    int numberParkingSpace = parking.getParkingSize() - carList.size();
+  static int printNumberParkingSpace(Parking parking, List<ParkingPlace> carList, int nullParkingPlace) {
+    int numberParkingSpace = parking.getParkingSize() - (carList.size() - nullParkingPlace);
     System.out.println("Amount of free parking slots " + numberParkingSpace);
     return numberParkingSpace;
   }

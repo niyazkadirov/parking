@@ -11,5 +11,6 @@ import java.util.List;
 @Setter
 public class Parking {
     private int parkingSize;
+    private int freePlace;
     private List<ParkingPlace> parkingPlace = new ArrayList<>();
 }
