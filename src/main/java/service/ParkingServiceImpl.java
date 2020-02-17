@@ -2,151 +2,172 @@ package service;
 
 import model.Car;
 import model.Parking;
+import model.ParkingPlace;
 
-import java.util.*;
+import java.util.InputMismatchException;
+import java.util.List;
+import java.util.Random;
+import java.util.Scanner;
 
 import static service.PrinterService.*;
 
-
 public class ParkingServiceImpl implements ParkingService {
-    private static final int UPPER_RANGE_RANDOM = 50;
-    private final List<Car> carList = new ArrayList<>();
-    private final Random random = new Random(System.currentTimeMillis());
-    private final Parking parking = new Parking();
-    private final Scanner scanner = new Scanner(System.in);
+  private static final int UPPER_RANGE_RANDOM = 50;
+  // private final List<Car> carList = new ArrayList<>();
+  private final Random random = new Random(System.currentTimeMillis());
+  private final Parking parking = new Parking();
+  private final Scanner scanner = new Scanner(System.in);
 
-    @Override
-    public boolean isHasFreePlace() {
-        return parking.getParkingSize() > carList.size();
+  @Override
+  public boolean isHasFreePlace() {
+    return parking.getParkingSize() > parking.getParkingPlace().size();
+  }
+
+  public int getParkingSizeNull() {
+    int counter = 0;
+    List<ParkingPlace> parkingPlace = parking.getParkingPlace();
+    for (ParkingPlace place : parkingPlace) {
+      if (place.getCar() == null) {
+        counter++;
+      }
     }
+    return counter;
+  }
 
-    @Override
-    public void parkingHandler() {
+  @Override
+  public void parkingHandler() {
 
+    while (true) {
 
-        while (true) {
+      String command = scanner.nextLine();
+      switch (command) {
+        case ("status"):
+          printParkingPlaceInfo(parking.getParkingPlace());
+          continue;
 
-            String command = scanner.nextLine();
-            switch (command) {
-                case ("status"):
-                    printParkingPlaceInfo(carList);
-                    continue;
+        case ("help"):
+          printHelpCommands();
+          continue;
 
-                case ("help"):
-                    printHelpCommands();
-                    continue;
+        case (""):
+          emptyMoveHandler();
+          continue;
 
-                case (""):
-                    emptyMoveHandler();
-                    continue;
+        case ("clear all"):
+          clearAll(parking.getParkingPlace());
+          continue;
 
-                case ("clear all"):
-                    clearAll(carList);
-                    continue;
-
-                default:
-                    if (!clearByIndex(command)) {
-                        System.out.println("Invalid command");
-                    }
-            }
-        }
+        default:
+          if (!clearByIndex(command)) {
+            System.out.println("Invalid command");
+          }
+      }
     }
+  }
 
-    @Override
-    public void emptyMoveHandler() {
-        int randomNumber = getRandomNumber(parking);
-        decrementAndRemoveCarList(carList);
-        generateCarsAndAddToList(carList, randomNumber);
+  @Override
+  public void emptyMoveHandler() {
+    int randomNumber = getRandomNumber(parking);
+    ParkingServiceImpl parkingService = new ParkingServiceImpl();
+    List<ParkingPlace> carList = parking.getParkingPlace();
+    decrementAndRemoveCarList(carList);
+    generateCarsAndAddToList(carList, randomNumber);
 
-        if (printAndGetNumberParkingSpace(parking, carList) == 0) {
-            printIterBeforeLeavingParking(carList);
-            int emptyPlace = randomNumber - (parking.getParkingSize() - carList.size());
-            printNotPlaceInParking(emptyPlace);
-        }
+    if (printAndGetNumberParkingSpace(parking, carList, parkingService) == 0) {
+      printIterBeforeLeavingParking(carList);
+      int emptyPlace = randomNumber - (parking.getParkingSize() - carList.size());
+      printNotPlaceInParking(emptyPlace);
     }
+  }
 
-    @Override
-    public boolean validateInputFromConsole() {
-        try {
-            int parkingSize = scanner.nextInt();
-            parking.setParkingSize(parkingSize);
+  @Override
+  public boolean validateInputFromConsole() {
+    try {
+      int parkingSize = scanner.nextInt();
+      parking.setParkingSize(parkingSize);
 
-            if (parkingSize <= 0) {
-                return false;
-            }
-        } catch (InputMismatchException ignored) {
-            scanner.next();
-            return false;
-        }
-        return true;
-    }
-
-    @Override
-    public void decrementAndRemoveCarList(List<Car> carList) {
-        for (int i = 0; i <= carList.size() - 1; i++) {
-            Car car = carList.get(i);
-            car.setRemainingIterate(car.getRemainingIterate() - 1);
-
-            if (car.getRemainingIterate() <= 0) {
-                carList.remove(car);
-            }
-        }
-    }
-
-    @Override
-    public int getRandomNumber(Parking parking) {
-        int numberAddedCars;
-        if (parking.getParkingSize() <= 5) {
-            numberAddedCars = 1;
-        } else {
-            int i = parking.getParkingSize() / 3;
-            numberAddedCars = random.nextInt(i);
-        }
-        return numberAddedCars;
-    }
-
-
-    @Override
-    public void generateCarsAndAddToList(List<Car> carList, final int randomNumber) {
-        for (int i = 1; i <= randomNumber; i++) {
-            if (isHasFreePlace()) {
-                int remainingIterate = random.nextInt(UPPER_RANGE_RANDOM);
-                carList.add(new Car(remainingIterate <= 0 ? 1 : remainingIterate));
-            }
-        }
-    }
-
-    @Override
-    public void clearAll(List<Car> carList) {
-        carList.clear();
-        System.out.println("parking successfully cleared");
-        printParkingPlaceInfo(carList);
-    }
-
-    @Override
-    public boolean clearByIndex(String index) {
-        String[] arrCommand = index.split(" ");
-        if (arrCommand[0].equals("clear")) {
-            try {
-                carList.remove(Integer.parseInt(arrCommand[1]));
-                System.out.println("Car under index " + arrCommand[1] + " was successfully deleted");
-                printParkingPlaceInfo(carList);
-                return true;
-            } catch (IndexOutOfBoundsException | NumberFormatException ignored) {
-                System.out.println("Элемент не найден");
-            }
-        }
+      if (parkingSize <= 0) {
         return false;
+      }
+    } catch (InputMismatchException ignored) {
+      scanner.next();
+      return false;
     }
+    return true;
+  }
 
-    @Override
-    public void printHelpCommands() {
-        System.out.println(
-                " -------------------------------------------------------------------------------- \n" +
-                        "| <status> - Displays all current cars with their lifetime and parking number.   |\n" +
-                        "| <clear all> - completely cleans parking.                                       |\n" +
-                        "| <clear [index]> - cleans parking by index                                         |\n" +
-                        " --------------------------------------------------------------------------------"
-        );
+  @Override
+  public void decrementAndRemoveCarList(List<ParkingPlace> carList) {
+    for (int i = 0; i <= carList.size() - 1; i++) {
+      List<ParkingPlace> parkingPlace = parking.getParkingPlace();
+      Car car = parkingPlace.get(i).getCar();
+
+      if (car != null) {
+        car.setRemainingIterate(car.getRemainingIterate() - 1);
+        if (car.getRemainingIterate() <= 0) {
+          //                carList.remove(car);
+          parking.getParkingPlace().get(i).setCar(null);
+        }
+      }
     }
+  }
+
+  @Override
+  public int getRandomNumber(Parking parking) {
+    int numberAddedCars;
+    if (parking.getParkingSize() <= 5) {
+      numberAddedCars = 1;
+    } else {
+      int i = parking.getParkingSize() / 3;
+      numberAddedCars = random.nextInt(i);
+    }
+    return numberAddedCars;
+  }
+
+  @Override
+  public void generateCarsAndAddToList(List<ParkingPlace> carList, final int randomNumber) {
+    for (int i = 1; i <= randomNumber; i++) {
+      int remainingIterate = random.nextInt(UPPER_RANGE_RANDOM);
+      if (isHasFreePlace()) {
+        List<ParkingPlace> parkingPlace = parking.getParkingPlace();
+        parkingPlace.add(new ParkingPlace(new Car(remainingIterate <= 0 ? 1 : remainingIterate)));
+      }
+
+    }
+  }
+
+  @Override
+  public void clearAll(List<ParkingPlace> carList) {
+    carList.clear();
+    System.out.println("parking successfully cleared");
+    printParkingPlaceInfo(carList);
+  }
+
+  @Override
+  public boolean clearByIndex(String index) {
+    String[] arrCommand = index.split(" ");
+    if (arrCommand[0].equals("clear")) {
+      try {
+        List<ParkingPlace> carList = parking.getParkingPlace();
+
+        carList.get(Integer.parseInt(arrCommand[1])).setCar(null);
+        System.out.println("Car under index " + arrCommand[1] + " was successfully deleted");
+        printParkingPlaceInfo(carList);
+        return true;
+      } catch (IndexOutOfBoundsException | NumberFormatException ignored) {
+        System.out.println("Элемент не найден");
+      }
+    }
+    return false;
+  }
+
+  @Override
+  public void printHelpCommands() {
+    System.out.println(
+        " -------------------------------------------------------------------------------- \n"
+            + "| <status> - Displays all current cars with their lifetime and parking number.   |\n"
+            + "| <clear all> - completely cleans parking.                                       |\n"
+            + "| <clear [index]> - cleans parking by index                                         |\n"
+            + " --------------------------------------------------------------------------------");
+  }
 }
