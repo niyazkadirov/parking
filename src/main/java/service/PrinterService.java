@@ -20,10 +20,8 @@ public class PrinterService {
     }
   }
 
-  static int printNumberParkingSpace(Parking parking, List<ParkingPlace> carList, int nullParkingPlace) {
-    int numberParkingSpace = parking.getParkingSize() - (carList.size() - nullParkingPlace);
+  static void printNumberParkingSpace( int numberParkingSpace) {
     System.out.println("Amount of free parking slots " + numberParkingSpace);
-    return numberParkingSpace;
   }
 
   static void printNotPlaceInParking(final int emptyPlace) {

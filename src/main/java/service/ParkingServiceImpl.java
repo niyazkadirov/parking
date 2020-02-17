@@ -70,7 +70,11 @@ public class ParkingServiceImpl implements ParkingService {
     decrementAndRemoveCarList(carList);
     generateCarsAndAddToParkingPlace(carList, randomNumber);
 
-    if (printNumberParkingSpace(parking, carList, getParkingPlaceSizeNull()) == 0) {
+
+    parking.setFreePlace(parking.getParkingSize() - (carList.size() - getParkingPlaceSizeNull()));
+
+    printNumberParkingSpace(parking.getFreePlace());
+    if (parking.getFreePlace() == 0) {
       printIterBeforeLeavingParking(carList);
       int emptyPlace = randomNumber - (parking.getParkingSize() - carList.size());
       printNotPlaceInParking(emptyPlace);
