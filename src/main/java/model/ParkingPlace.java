@@ -7,8 +7,6 @@ import lombok.Setter;
 @Setter
 public class ParkingPlace {
     private Car car;
-    private int id;
-    private boolean status;
 
     public ParkingPlace(Car car) {
         this.car = car;

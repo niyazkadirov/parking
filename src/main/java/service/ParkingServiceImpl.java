@@ -20,7 +20,7 @@ public class ParkingServiceImpl implements ParkingService {
 
     @Override
     public boolean isHasFreePlace() {
-        return parking.getParkingSize() > parking.getParkingPlace().size();
+        return parking.getParkingSize() > parking.getParkingPlaceList().size();
     }
 
     @Override
@@ -31,7 +31,7 @@ public class ParkingServiceImpl implements ParkingService {
             String command = scanner.nextLine();
             switch (command) {
                 case ("status"):
-                    printParkingPlaceInfo(parking.getParkingPlace());
+                    printParkingPlaceInfo(parking.getParkingPlaceList());
                     continue;
 
                 case ("help"):
@@ -43,7 +43,7 @@ public class ParkingServiceImpl implements ParkingService {
                     continue;
 
                 case ("clear all"):
-                    clearAll(parking.getParkingPlace());
+                    clearAll(parking.getParkingPlaceList());
                     continue;
 
                 default:
@@ -54,9 +54,10 @@ public class ParkingServiceImpl implements ParkingService {
         }
     }
 
+    @Override
     public int getEmptyParkingSpaces() {
         return (int)
-                parking.getParkingPlace().stream()
+                parking.getParkingPlaceList().stream()
                         .filter(parkingPlace -> parkingPlace.getCar() == null)
                         .count();
     }
@@ -64,10 +65,10 @@ public class ParkingServiceImpl implements ParkingService {
     @Override
     public void emptyMoveHandler() {
         int randomNumber = getRandomNumber(parking);
-        List<ParkingPlace> parkingPlaceList = parking.getParkingPlace();
+        List<ParkingPlace> parkingPlaceList = parking.getParkingPlaceList();
+
         decrementAndRemoveParkingPlaceList(parkingPlaceList);
         generateCarsAndAddToParkingPlace(parkingPlaceList, randomNumber);
-
         parking.setEmptyPlace(
                 parking.getParkingSize() - (parkingPlaceList.size() - getEmptyParkingSpaces()));
 
@@ -100,21 +101,20 @@ public class ParkingServiceImpl implements ParkingService {
 
         int remainingIterate = Integer.MAX_VALUE;
         for (int i = 0; i <= carList.size() - 1; i++) {
-            List<ParkingPlace> parkingPlace = parking.getParkingPlace();
-            Car car = parkingPlace.get(i).getCar();
+            Car car = parking.getParkingPlaceList().get(i).getCar();
 
             if (car != null) {
                 car.setRemainingIterate(car.getRemainingIterate() - 1);
-                if (car.getRemainingIterate() <= 0) {
-                    parking.getParkingPlace().get(i).setCar(null);
-                }
-            }
 
-            if (car != null) {
-                if (remainingIterate > car.getRemainingIterate()) {
+                if (car.getRemainingIterate() <= 0) {
+                    parking.getParkingPlaceList().get(i).setCar(null);
+                }
+
+                if (remainingIterate > car.getRemainingIterate() & car.getRemainingIterate() != 0) {
                     remainingIterate = car.getRemainingIterate();
                 }
             }
+
         }
         car.setRemainingIterate(remainingIterate);
     }
@@ -136,15 +136,12 @@ public class ParkingServiceImpl implements ParkingService {
         for (int i = 1; i <= randomNumber; i++) {
             int remainingIterate = random.nextInt(UPPER_RANGE_RANDOM);
             if (isHasFreePlace()) {
-                List<ParkingPlace> parkingPlace = parking.getParkingPlace();
-                parkingPlace.add(new ParkingPlace(new Car(remainingIterate <= 0 ? 1 : remainingIterate)));
+                parking.getParkingPlaceList().add(new ParkingPlace(new Car(remainingIterate <= 0 ? 1 : remainingIterate)));
             } else {
-                parking.getParkingPlace().stream()
+                parking.getParkingPlaceList().stream()
                         .filter(parkingPlace -> parkingPlace.getCar() == null)
                         .limit(randomNumber)
-                        .forEach(
-                                parkingPlace ->
-                                        parkingPlace.setCar(new Car(remainingIterate <= 0 ? 1 : remainingIterate)));
+                        .forEach(parkingPlace -> parkingPlace.setCar(new Car(remainingIterate <= 0 ? 1 : remainingIterate)));
             }
         }
     }
@@ -161,14 +158,14 @@ public class ParkingServiceImpl implements ParkingService {
         String[] arrCommand = index.split(" ");
         if (arrCommand[0].equals("clear")) {
             try {
-                List<ParkingPlace> carList = parking.getParkingPlace();
+                List<ParkingPlace> carList = parking.getParkingPlaceList();
 
                 carList.get(Integer.parseInt(arrCommand[1])).setCar(null);
                 System.out.println("Car under index " + arrCommand[1] + " was successfully deleted");
                 printParkingPlaceInfo(carList);
                 return true;
             } catch (IndexOutOfBoundsException | NumberFormatException ignored) {
-                System.out.println("Элемент не найден");
+                System.out.println("Element not found");
             }
         }
         return false;

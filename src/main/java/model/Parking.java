@@ -12,5 +12,5 @@ import java.util.List;
 public class Parking {
     private int parkingSize;
     private int emptyPlace;
-    private List<ParkingPlace> parkingPlace = new ArrayList<>();
+    private List<ParkingPlace> parkingPlaceList = new ArrayList<>();
 }

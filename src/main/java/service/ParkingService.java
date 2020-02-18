@@ -1,6 +1,5 @@
 package service;
 
-import model.Car;
 import model.Parking;
 import model.ParkingPlace;
 
@@ -27,4 +26,6 @@ interface ParkingService {
     void emptyMoveHandler();
 
     void printHelpCommands();
+
+    int getEmptyParkingSpaces();
 }

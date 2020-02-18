@@ -1,5 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
+  <component name="EntryPointsManager">
+    <pattern value="service.ParkingService" method="clearAll" />
+    <pattern value="service.ParkingService" method="clearByIndex" />
+    <pattern value="service.ParkingService" method="decrementAndRemoveParkingPlaceList" />
+    <pattern value="service.ParkingService" method="emptyMoveHandler" />
+    <pattern value="service.ParkingService" method="generateCarsAndAddToParkingPlace" />
+    <pattern value="service.ParkingService" method="getEmptyParkingSpaces" />
+    <pattern value="service.ParkingService" method="getRandomNumber" />
+    <pattern value="service.ParkingService" method="isHasFreePlace" />
+    <pattern value="service.ParkingService" />
+    <pattern value="service.ParkingService" method="printHelpCommands" />
+  </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="MavenProjectsManager">
     <option name="originalFiles">
