@@ -133,17 +133,19 @@ public class ParkingServiceImpl implements ParkingService {
 
     @Override
     public void generateCarsAndAddToParkingPlace(List<ParkingPlace> carList, final int randomNumber) {
+        int remainingIterate = random.nextInt(UPPER_RANGE_RANDOM);
         for (int i = 1; i <= randomNumber; i++) {
-            int remainingIterate = random.nextInt(UPPER_RANGE_RANDOM);
             if (isHasFreePlace()) {
                 parking.getParkingPlaceList().add(new ParkingPlace(new Car(remainingIterate <= 0 ? 1 : remainingIterate)));
-            } else {
-                parking.getParkingPlaceList().stream()
-                        .filter(parkingPlace -> parkingPlace.getCar() == null)
-                        .limit(randomNumber)
-                        .forEach(parkingPlace -> parkingPlace.setCar(new Car(remainingIterate <= 0 ? 1 : remainingIterate)));
             }
         }
+        if (!isHasFreePlace()) {
+            parking.getParkingPlaceList().stream()
+                    .filter(parkingPlace -> parkingPlace.getCar() == null)
+                    .limit(randomNumber)
+                    .forEach(parkingPlace -> parkingPlace.setCar(new Car(remainingIterate <= 0 ? 1 : remainingIterate)));
+        }
+
     }
 
     @Override
